@@ -36,9 +36,14 @@ player = player1
 symbol = "X"
 
 def addMoveToBoard(nextMove, board, symbol):
-  #row = rowCount
-  board[5][nextMove] = symbol
-  #print(board)
+  for i in range(5,-1,-1):
+    if board[i][nextMove] == "":
+      board[i][nextMove] = symbol
+      return
+    """
+    elif board[i][nextMove] != "":
+      print("Column full, please choose a different column")
+    """
 
 while True:
   os.system("clear")
