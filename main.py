@@ -1,7 +1,11 @@
 import os
+import threading
+import sys
+
 player1 = "Player 1"
 player2 = "Player 2"
-
+symbol1 = "\033[1;32mX\033[0;37m"
+symbol2 = "\033[1;31mO\033[0;37m"
 """
 rowCount = 6
 columnCount = 7 # max 9
@@ -32,29 +36,60 @@ def prettyPrint(board):
     print("\n")
   print()
 
+def announceWinner(player):
+  print(f"{player} wins the game, whoop whoop!")
+  sys.exit()
+
 player = player1
-symbol = "X"
+symbol = symbol1
 
 def addMoveToBoard(nextMove, board, symbol):
-  for i in range(5,-1,-1):
+  for i in range(5,-1,-1): # 5 specifies number of rows, -1 is necessary so that 0 row can be reached, -1 indicates negative iteration
     if board[i][nextMove] == "":
       board[i][nextMove] = symbol
       return
-    """
-    elif board[i][nextMove] != "":
-      print("Column full, please choose a different column")
-    """
+    #else:
+    #  print("Column full, please choose a different column")
 
-while True:
-  os.system("clear")
-  prettyPrint(board)
-  nextMove = int(input(f"{player}, enter a column number > "))
-  
-  addMoveToBoard(nextMove, board, symbol)
-  
+def checkHorizontalWin(board, symbol, player):
+  count = 0
+  for row in board:
+    for i in range(len(row)):
+      if row[i] == symbol:
+        count += 1
+        if count == 4:
+          announceWinner(player)
+      else:
+        count = 0 # resets count to 0
+
+"""
+def changePlayer(player, symbol):
   if player == player1: 
     player = player2
-    symbol = "O" # specify symbol on board for player1
+    symbol = symbol2 # specify symbol on board for player1
+    print(player)
   else:
     player = player1 # switch players for next round
-    symbol = "X" # specify symbol on board for player1
+    symbol = symbol1 # specify symbol on board for player1
+    print(player)
+  return player, symbol
+"""
+prettyPrint(board)
+while True:
+ 
+  nextMove = int(input(f"{player}, enter a column number > "))
+  addMoveToBoard(nextMove, board, symbol)
+  os.system("clear")
+  prettyPrint(board)
+  
+  checkHorizontalWin(board, symbol, player)
+  #player = changePlayer(player, symbol)[0]
+  #symbol = changePlayer(player, symbol)[1]
+  
+
+  if player == player1: 
+    player = player2
+    symbol = symbol2 # specify symbol on board for player1
+  else:
+    player = player1 # switch players for next round
+    symbol = symbol1 # specify symbol on board for player1
