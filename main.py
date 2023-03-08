@@ -68,10 +68,13 @@ def checkVerticalWin(board, symbol, player):
       for i in range(len(sublist)):
           if sublist[i] == symbol:
               count[i] += 1
+              for row in count:
+                if row == 4:
+                  announceWinner(player)
+          else:
+            count[i] = 0
             
-  for row in count:
-    if row == 4:
-      announceWinner(player)
+  
 
 def changePlayer(player, symbol):
   if player == player1: 
