@@ -2,8 +2,8 @@ import os
 import threading
 import sys
 
-player1 = "Player 1"
-player2 = "Player 2"
+player1 = "\033[1;32mPlayer 1\033[0;37m"
+player2 = "\033[1;31mPlayer 2\033[0;37m"
 symbol1 = "\033[1;32mX\033[0;37m"
 symbol2 = "\033[1;31mO\033[0;37m"
 """
@@ -62,18 +62,23 @@ def checkHorizontalWin(board, symbol, player):
       else:
         count = 0 # resets count to 0
 
-"""
+def checkVerticalWin(board, symbol, player):
+  count = [0] * len(board[0])
+  for sublist in board:
+      for i in range(len(sublist)):
+          if sublist[i] == symbol:
+              count[i] += 1
+            
+  for row in count:
+    if row == 4:
+      announceWinner(player)
+
 def changePlayer(player, symbol):
   if player == player1: 
-    player = player2
-    symbol = symbol2 # specify symbol on board for player1
-    print(player)
+    return player2, symbol2
   else:
-    player = player1 # switch players for next round
-    symbol = symbol1 # specify symbol on board for player1
-    print(player)
-  return player, symbol
-"""
+    return player1, symbol1
+
 prettyPrint(board)
 while True:
  
@@ -83,13 +88,5 @@ while True:
   prettyPrint(board)
   
   checkHorizontalWin(board, symbol, player)
-  #player = changePlayer(player, symbol)[0]
-  #symbol = changePlayer(player, symbol)[1]
-  
-
-  if player == player1: 
-    player = player2
-    symbol = symbol2 # specify symbol on board for player1
-  else:
-    player = player1 # switch players for next round
-    symbol = symbol1 # specify symbol on board for player1
+  checkVerticalWin(board, symbol, player)
+  player, symbol = changePlayer(player, symbol)
