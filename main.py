@@ -1,5 +1,4 @@
 import os
-import threading
 import sys
 
 player1 = "\033[1;32mPlayer 1\033[0;37m"
@@ -42,14 +41,16 @@ def announceWinner(player):
 
 player = player1
 symbol = symbol1
+fullRows = []
 
 def addMoveToBoard(nextMove, board, symbol):
   for i in range(5,-1,-1): # 5 specifies number of rows, -1 is necessary so that 0 row can be reached, -1 indicates negative iteration
     if board[i][nextMove] == "":
       board[i][nextMove] = symbol
       return
-    #else:
-    #  print("Column full, please choose a different column")
+    else:
+      fullRows.append(nextMove)
+      print("Column full, please choose a different column")
 
 def checkHorizontalWin(board, symbol, player):
   count = 0
@@ -86,10 +87,15 @@ prettyPrint(board)
 while True:
  
   nextMove = int(input(f"{player}, enter a column number > "))
-  addMoveToBoard(nextMove, board, symbol)
-  os.system("clear")
-  prettyPrint(board)
-  
-  checkHorizontalWin(board, symbol, player)
-  checkVerticalWin(board, symbol, player)
-  player, symbol = changePlayer(player, symbol)
+  if nextMove not in fullRows:
+    addMoveToBoard(nextMove, board, symbol)
+    os.system("clear")
+    prettyPrint(board)
+    print(fullRows)
+    
+    checkHorizontalWin(board, symbol, player)
+    checkVerticalWin(board, symbol, player)
+    player, symbol = changePlayer(player, symbol)
+
+  else:
+    print(f"Row {nextMove} is full, please choose a different row\n")
