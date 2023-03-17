@@ -44,13 +44,13 @@ symbol = symbol1
 fullRows = []
 
 def addMoveToBoard(nextMove, board, symbol):
+  if board[1][nextMove] != "": # first check if row becomes full with this move, than add move to board
+      fullRows.append(nextMove)
+        
   for i in range(5,-1,-1): # 5 specifies number of rows, -1 is necessary so that 0 row can be reached, -1 indicates negative iteration
     if board[i][nextMove] == "":
       board[i][nextMove] = symbol
       return
-    else:
-      fullRows.append(nextMove)
-      print("Column full, please choose a different column")
 
 def checkHorizontalWin(board, symbol, player):
   count = 0
@@ -84,14 +84,13 @@ def changePlayer(player, symbol):
     return player1, symbol1
 
 prettyPrint(board)
+
 while True:
- 
   nextMove = int(input(f"{player}, enter a column number > "))
   if nextMove not in fullRows:
     addMoveToBoard(nextMove, board, symbol)
     os.system("clear")
     prettyPrint(board)
-    print(fullRows)
     
     checkHorizontalWin(board, symbol, player)
     checkVerticalWin(board, symbol, player)
